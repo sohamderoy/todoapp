@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 // Importing components
@@ -10,6 +10,15 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
+
+  useEffect(() => {
+    getLocalTodos();
+  }, []);
+
+  useEffect(() => {
+    filterHandler();
+    saveLocalTodos();
+  }, [todos, status]);
 
   const filterHandler = () => {
     switch (status) {
@@ -25,6 +34,18 @@ function App() {
     }
   };
 
+  const saveLocalTodos = () => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+  const getLocalTodos = () => {
+    if (localStorage.getItem("todos") === null) {
+      localStorage.setItem("todos", JSON.stringify([]));
+    } else {
+      let localTodos = JSON.parse(localStorage.getItem("todos"));
+      setTodos(localTodos);
+    }
+  };
+
   return (
     <div className="App">
       <header>
@@ -37,7 +58,11 @@ function App() {
         setInputText={setInputText}
         setStatus={setStatus}
       />
-      <TodoList setTodos={setTodos} todos={todos} />
+      <TodoList
+        filteredTodos={filteredTodos}
+        setTodos={setTodos}
+        todos={todos}
+      />
     </div>
   );
 }
