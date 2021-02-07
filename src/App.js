@@ -13,6 +13,7 @@ function App() {
 
   useEffect(() => {
     getLocalTodos();
+    document.title = "Todo App";
   }, []);
 
   useEffect(() => {
@@ -45,7 +46,6 @@ function App() {
       setTodos(localTodos);
     }
   };
-
   return (
     <div className="App">
       <header>
